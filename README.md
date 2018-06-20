@@ -10,3 +10,4 @@
 
 
 
+/Users/x7xsa/Desktop/Simulator Screen Shot - iPhone X - 2018-06-20 at 17.15.09.png
