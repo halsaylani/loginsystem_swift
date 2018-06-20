@@ -9,7 +9,7 @@ hspace="10" vspace="10">
 width="150"
 hspace="10" vspace="10">
 
-<img src="/homepage.png" align="right"
+<img src="/homepage.png" align="center"
 width="150"
 hspace="10" vspace="10">
 
