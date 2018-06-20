@@ -5,11 +5,11 @@
 width="150"
 hspace="10" vspace="10">
 
-<img src="/singup.png" align="left"
+<img src="/singup.png" align="center"
 width="150"
 hspace="10" vspace="10">
 
-<img src="/homepage.png" align="left"
+<img src="/homepage.png" align="right"
 width="150"
 hspace="10" vspace="10">
 
