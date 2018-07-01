@@ -7,71 +7,121 @@
 //
 
 import UIKit
-
 import Firebase
-
 class homeViewController: UIViewController {
     
+    @IBOutlet weak var welcome: UILabel!
     
     @IBOutlet weak var constrain: NSLayoutConstraint!
-    @IBOutlet weak var blurview: UIVisualEffectView!
-    @IBOutlet weak var menuview: UIView!
+
+    @IBOutlet weak var clear: UIButton!
+    
+    @IBOutlet weak var manuview: UIView!
+    
+    
+    var users = [User]()
+    
+    
+    
+//    @IBOutlet weak var blurview: UIVisualEffectView!
+//    @IBOutlet weak var menuview: UIView!
     
     var ishedden = true
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        // hide view
+       constrain.constant = -170
         
-        blurview.layer.cornerRadius = 10
-        menuview.layer.shadowColor = UIColor.black.cgColor
-       // constrain.constant = -247
+      
+         //currentuser()
         
-        // Do any additional setup after loading the view.
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    @IBAction func logout(_ sender: UIButton) {
+   
+    @IBAction func clear(_ sender: Any) {
         
-
-        do {
+        if ishedden  {
+         
             
-            try Auth.auth().signOut()
-            UserDefaults.standard.set(false, forKey: "isloggedin")
-            let main = self.storyboard?.instantiateViewController(withIdentifier: "main") as! ViewController
             
-            self.navigationController?.pushViewController(main, animated: true
-            )
-        } catch {
-            ShowMessage(Message: "error while logging out")
+            UIView.animate(withDuration: 0.3, animations: {
+                self.constrain.constant = -170
+                self.view.layoutIfNeeded()
+            })
+        }else {
+            
+           
+            UIView.animate(withDuration: 0.3, animations: {
+                self.constrain.constant = 0
+                
+                self.view.layoutIfNeeded()
+            })
         }
-        
     }
+    @IBOutlet weak var n: UINavigationItem!
     
     @IBAction func showmenun(_ sender: UIBarButtonItem) {
         
-        if ishedden {
-
-            UIView.animate(withDuration: 1, animations: {
-                self.menuview.isHidden = false
-            }, completion: nil)
-
-
+        if ishedden  {
+           
+            UIView.animate(withDuration: 0.3, animations: {
+                 self.constrain.constant = 0
+                
+                 self.view.layoutIfNeeded()
+                })
+          
         }else {
-            UIView.animate(withDuration: 1, animations: {
-                self.menuview.isHidden = true
-            }, completion: nil)
-
+           
+            UIView.animate(withDuration: 0.3, animations: {
+                self.constrain.constant = -170
+                 self.view.layoutIfNeeded()
+                })
         }
         ishedden = !ishedden
-        
-
+    
     }
     
+//    @IBAction func allnames(_ sender: Any) {
+//
+//        let rf = Database.database().reference().child("Users")
+//
+//        rf.observe(.childAdded, with: {(snapshot)in
+//            if  let  values = snapshot.value as? [String: AnyObject]{
+//
+//                let user = Users()
+//
+//
+//                
+//                user.Name = values["Name"] as! String
+//                user.Email = values["Email"] as! String
+//                user.Password = values["Password"] as! String
+//
+//
+//                print(user.Password as Any , user.Name as Any, user.Email as Any )
+//            }
+//
+//
+//
+//        })
+//
+//
+//
+//
+//    }
+//    func currentuser() {
+//        let userid = Auth.auth().currentUser?.uid
+//
+//        let rf = Database.database().reference().child("Users").child(userid!)
+//        rf.observeSingleEvent(of: .value, with: {(snapshot)in
+//
+//            let value = snapshot.value as? [String: AnyObject]
+//            let name = value!["Name"] as? String
+//           self.welcome.text = name
+//
+//        })
+//
+//
+//    }
     
     func ShowMessage(Message: String){
         
@@ -79,8 +129,5 @@ class homeViewController: UIViewController {
         
         m.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(m, animated: true, completion: nil)
-        
     }
-    
 }
-
