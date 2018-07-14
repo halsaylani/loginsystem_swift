@@ -13,7 +13,7 @@ import Firebase
 class registerViewController: UIViewController, UIImagePickerControllerDelegate , UINavigationControllerDelegate {
     
     
-    @IBOutlet weak var blur: UIVisualEffectView!
+   // @IBOutlet weak var blur: UIVisualEffectView!
     @IBOutlet weak var nametext: UITextField!
     @IBOutlet weak var emailtext: UITextField!
     @IBOutlet weak var passwordtext: UITextField!
@@ -27,7 +27,7 @@ class registerViewController: UIViewController, UIImagePickerControllerDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        blur.layer.cornerRadius = 10
+       // blur.layer.cornerRadius = 10
         
         // allow user iteraction once imageview taped
         imageview.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSlectedImage)))

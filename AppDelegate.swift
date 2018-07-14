@@ -8,25 +8,93 @@
 
 import UIKit
 import Firebase
+import UserNotifications
+import GoogleSignIn
+import FBSDKLoginKit
+
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
+class AppDelegate: UIResponder, UIApplicationDelegate ,GIDSignInDelegate,UNUserNotificationCenterDelegate {
+    
+    
     var window: UIWindow?
+    
+    let user = User()
+    
+    // action when notification pressed
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        if response.notification.request.identifier == "update" {
+            print("to app store")
+        }
+       completionHandler()
+    }
+    
+    // to work in forground stage
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert , .sound])
+    }
 
-
+    
+    // handel google url
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any])
+        -> Bool {
+            
+            
+            return GIDSignIn.sharedInstance().handle(url,
+                                                     sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
+                                                     annotation: [:])
+    }
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
         //Database config
         FirebaseApp.configure()
         
+        // google client id
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
         
-        //test connection
-//        let db = Database.database().reference()
-//        db.setValue("first data")
+        // facebook shared instance
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        //Notofocation delegate
+        UNUserNotificationCenter.current().delegate = self
+        // get permision from user to allow notification
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert , .badge , .sound], completionHandler: {(granted , error)in
+            if error != nil{
+                print("error")
+            }
+            print("granted: \(granted)")
+            
+        })
+        
+        
         return true
     }
+    
+    //google signin
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        
+        if let error = error {
+            // ...
+            print(error)
+            return
+        }
+        
+        //get idtoken and accesstoken
+        let idToken = user.authentication.idToken
+        let accessToken = user.authentication.accessToken
+        let credential = GoogleAuthProvider.credential(withIDToken: idToken!,
+                                                       accessToken: accessToken!)
+        //auth with firebase
+        self.user.SocialAuth( Credential: credential , window: self.window!)
+        
+    }
+    
+   
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

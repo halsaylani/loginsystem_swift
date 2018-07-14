@@ -17,3 +17,4 @@ hspace="10" vspace="10">
 #  step 3 apply the logics to singup and login forms controllers ( save info in firebase , auth if user can singin)
 # step 4 handle actions in home page( slidemenu,logout etc)
 ## Last update apply the following: Sing user out , Delete User Account, Create class for User, Alert , Storyboards ,Activity Indecator in (model file) , set Forgete password by Email ,and access to camera and photo library for profile image
+## Google / Facebook Signin Futures

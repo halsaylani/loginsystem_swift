@@ -76,15 +76,16 @@ class itemsViewController: UIViewController, UITableViewDelegate,UITableViewData
         if indexPath.section == 0 {
         
         switch (indexPath.row) {
-            // index = 0
+            // index = 0 (Name)
         case 0:
-           self.alerts.OkAlerts(title: "will be.", message: "provided soon", Controller: self)
-           // index = 1
+            
+            self.story.tonamesetting(Controller: self)
+           // index = 1 (Email)
         case 1:
-              self.alerts.OkAlerts(title: "will be.", message: "provided soon", Controller: self)
-              //default index = 2
+              self.story.toemailsetting(Controller: self)
+              //default index = 2 (Password)
         default:
-               self.alerts.OkAlerts(title: "will be.", message: "provided soon", Controller: self)
+               self.story.topasswordsetting(Controller: self)
         }
             
         }

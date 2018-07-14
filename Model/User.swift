@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import GoogleSignIn
 
 class User: NSObject {
     
@@ -20,7 +21,7 @@ class User: NSObject {
     let alerts = Alert()
     let indicator = ActivityIndicator()
     
-    // User auth  function
+    // User auth function (sign in)
     func auth(email: String, pass: String, Controller: UIViewController) {
         
          //Activity indicator start
@@ -66,7 +67,7 @@ class User: NSObject {
         })
     }
     
-    //Creat User Auth
+    //Creat User Auth (sign up)
     func CreateUserAuth(name: String, email: String, password: String , Controller: UIViewController){
         
         //Activity indicator start
@@ -119,6 +120,8 @@ class User: NSObject {
         
         // try To sing user out
         do {
+            //sign out with google
+            GIDSignIn.sharedInstance().signOut()
             try Auth.auth().signOut()
             // userdefult to false
             UserDefaults.standard.set(false, forKey: "isloggedin")
@@ -156,6 +159,49 @@ class User: NSObject {
         })
         
     }
+    
+    // auth with google
+    func SocialAuth( Credential: AuthCredential , window: UIWindow){
+        
+       
+        
+        
+        Auth.auth().signInAndRetrieveData(with: Credential) { (authResult, error) in
+            if let error = error {
+                // ...
+                print(error)
+                return
+            }
+            // to home page after user auth in firbase
+           print("home")
+            self.story.googlehomepage(window: window)
+        }
+        
+        
+    }
+    
+    //get current user name by passing a textfield
+    func CurrentUserName(textfield: UITextField){
+                let userid = Auth.auth().currentUser?.uid
+        
+               let rf = Database.database().reference().child("Users").child(userid!)
+               rf.observeSingleEvent(of: .value, with: {(snapshot)in
+       
+                    let value = snapshot.value as? [String: AnyObject]
+                 let name = value!["Name"] as! String
+                textfield.text = name
+              })
+           }
+    
+    //get current user email
+    func CurrentUserEmail(label: UILabel){
+                    let user = Auth.auth().currentUser
+            if let user = user {
+                    let email = user.email
+                    label.text = email
+                }
+        
+            }
     
 }
 
